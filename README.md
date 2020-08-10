@@ -28,6 +28,10 @@ $ kubectl get node node01 -ojson | jp -k osImage -t
 .status.nodeInfo.osImage:string
 ```
 
+## Releases
+
+See the [releases](https://github.com/kubism/jsonpath/releases) to download the binary.
+
 ## Acknowledgements
 
 * [cespare/jsonpath](https://github.com/cespare/jsonpath) - The source of this codebase
