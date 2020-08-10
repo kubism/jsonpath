@@ -13,10 +13,11 @@ import (
 var (
 	key       string
 	showValue bool
+	showType  bool
 )
 
 var jpCmd = &cobra.Command{
-	Use:   "jp action [flags]",
+	Use:   "jp [flags]",
 	Short: "JsonPath finds paths to a key in nested JSON structures.",
 	RunE: func(cmd *cobra.Command, args []string) error {
 		if key == "" {
@@ -53,6 +54,7 @@ func init() {
 	flags.AddGoFlagSet(flag.CommandLine)
 	flags.StringVarP(&key, "key", "k", "", "Key to search for")
 	flags.BoolVarP(&showValue, "show-value", "v", false, "If enabled, will show the value for found path")
+	flags.BoolVarP(&showType, "show-type", "t", false, "If enabled, will show the type of the value for found path")
 }
 
 func printPaths(v interface{}, key, path string) {
@@ -61,11 +63,14 @@ func printPaths(v interface{}, key, path string) {
 		for mk, mv := range v {
 			p := path + "." + mk
 			if mk == key {
+				fmt.Print(p)
 				if showValue {
-					fmt.Printf("%v [%v]\n", p, mv)
-				} else {
-					fmt.Println(p)
+					fmt.Printf(":%v", mv)
 				}
+				if showType {
+					fmt.Printf(":%T", mv)
+				}
+				fmt.Print("\n")
 			}
 			printPaths(mv, key, p)
 		}
