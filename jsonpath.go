@@ -14,7 +14,7 @@ func printPaths(v interface{}, key, path string) {
 		for mk, mv := range v {
 			p := path + "." + mk
 			if mk == key {
-				fmt.Println(p)
+				fmt.Printf("%v [%v]\n", p, mv)
 			}
 			printPaths(mv, key, p)
 		}
@@ -23,6 +23,18 @@ func printPaths(v interface{}, key, path string) {
 			printPaths(sv, key, fmt.Sprintf("%s[%d]", path, i))
 		}
 	}
+}
+
+func usage() {
+	fmt.Fprintf(os.Stderr, `usage:
+  %s key
+where key is the key to search for in JSON structures passed to standard input.
+`, os.Args[0])
+}
+
+func fatalln(args ...interface{}) {
+	fmt.Fprintln(os.Stderr, args...)
+	os.Exit(1)
 }
 
 func main() {
@@ -55,16 +67,4 @@ func main() {
 	if err := scanner.Err(); err != nil {
 		fatalln(err)
 	}
-}
-
-func usage() {
-	fmt.Fprintf(os.Stderr, `usage:
-  %s key
-where key is the key to search for in JSON structures passed to standard input.
-`, os.Args[0])
-}
-
-func fatalln(args ...interface{}) {
-	fmt.Fprintln(os.Stderr, args...)
-	os.Exit(1)
 }

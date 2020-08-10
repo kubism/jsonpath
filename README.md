@@ -1,25 +1,28 @@
-# jsonpath
+# jp (jsonPath)
 
-Find a path to a key in nested JSON structures.
+A simple commandline tool to find the path to a key in nested JSON structures. Reads json from stdin.
+
+## Usage
+
+```
+Usage:
+  jp [flags]
+
+Flags:
+  -h, --help         help for jp
+  -k, --key string   Key to search for
+  -v, --show-value   If enabled, will show the value for found path
+```
 
 ## Example
 
+```bash
+$ kubectl get node node01 -ojson | jp -k osImage
+.status.nodeInfo.osImage
+$ kubectl get node node01 -ojson | jp -k osImage -v
+.status.nodeInfo.osImage [Flatcar Container Linux by Kinvolk 2512.2.0 (Oklo)]
 ```
-$ cat example.json
-{"items":{"item":[{"id":"0001","type":"donut","name":"Cake","ppu":0.55,"batters":{"batter":[{"id":"1001","type":"Regular"},{"id":"1002","type":"Chocolate"},{"id":"1003","type":"Blueberry"},{"id":"1004","type":"Devil's Food"}]},"topping":[{"id":"5001","type":"None"},{"id":"5002","type":"Glazed"},{"id":"5005","type":"Sugar"},{"id":"5007","type":"Powdered Sugar"},{"id":"5006","type":"Chocolate with Sprinkles"},{"id":"5003","type":"Chocolate"},{"id":"5004","type":"Maple"}]}]}}
-$ jsonpath topping < example.json
-.items.item[0].topping
-$ jsonpath type < example.json
-.items.item[0].type
-.items.item[0].batters.batter[0].type
-.items.item[0].batters.batter[1].type
-.items.item[0].batters.batter[2].type
-.items.item[0].batters.batter[3].type
-.items.item[0].topping[0].type
-.items.item[0].topping[1].type
-.items.item[0].topping[2].type
-.items.item[0].topping[3].type
-.items.item[0].topping[4].type
-.items.item[0].topping[5].type
-.items.item[0].topping[6].type
-```
+
+## Acknowledgements
+
+* [cespare/jsonpath](https://github.com/cespare/jsonpath) - The source of this codebase
