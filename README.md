@@ -9,10 +9,11 @@ Usage:
   jp [flags]
 
 Flags:
-  -h, --help         help for jp
-  -k, --key string   Key to search for
-  -t, --show-type    If enabled, will show the type of the value for found path
-  -v, --show-value   If enabled, will show the value for found path
+  -h, --help          help for jp
+  -i, --ignore-case   If enabled, will ignores case when matching key
+  -k, --key string    Key to search for
+  -t, --show-type     If enabled, will show the type of the value for found path
+  -v, --show-value    If enabled, will show the value for found path
 ```
 
 ## Example
@@ -21,11 +22,13 @@ Flags:
 $ kubectl get node node01 -ojson | jp -k osImage
 .status.nodeInfo.osImage
 $ kubectl get node node01 -ojson | jp -k osImage -v
-.status.nodeInfo.osImage:Flatcar Container Linux by Kinvolk 2512.2.0 (Oklo)
+.status.nodeInfo.osImage:Flatcar Container Linux
 $ kubectl get node node01 -ojson | jp -k osImage -v -t
-.status.nodeInfo.osImage:Flatcar Container Linux by Kinvolk 2512.2.0 (Oklo):string
+.status.nodeInfo.osImage:Flatcar Container Linux:string
 $ kubectl get node node01 -ojson | jp -k osImage -t
 .status.nodeInfo.osImage:string
+kubectl get node node01 -ojson | ./jp.linux -k containerruntimeversion -v -i
+.status.nodeInfo.containerRuntimeVersion:docker://47.1.1
 ```
 
 ## Releases

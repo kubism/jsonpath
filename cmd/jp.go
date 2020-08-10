@@ -6,14 +6,16 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	"gopkg.in/spf13/cobra.v0"
 )
 
 var (
-	key       string
-	showValue bool
-	showType  bool
+	key        string
+	showValue  bool
+	showType   bool
+	ignoreCase bool
 )
 
 var jpCmd = &cobra.Command{
@@ -55,6 +57,7 @@ func init() {
 	flags.StringVarP(&key, "key", "k", "", "Key to search for")
 	flags.BoolVarP(&showValue, "show-value", "v", false, "If enabled, will show the value for found path")
 	flags.BoolVarP(&showType, "show-type", "t", false, "If enabled, will show the type of the value for found path")
+	flags.BoolVarP(&ignoreCase, "ignore-case", "i", false, "If enabled, will ignores case when matching key")
 }
 
 func printPaths(v interface{}, key, path string) {
@@ -62,7 +65,7 @@ func printPaths(v interface{}, key, path string) {
 	case map[string]interface{}:
 		for mk, mv := range v {
 			p := path + "." + mk
-			if mk == key {
+			if (ignoreCase && strings.EqualFold(mk, key)) || mk == key {
 				fmt.Print(p)
 				if showValue {
 					fmt.Printf(":%v", mv)
