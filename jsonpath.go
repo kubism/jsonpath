@@ -28,24 +28,30 @@ func printPaths(v interface{}, key, path string) {
 func main() {
 	flag.Usage = usage
 	flag.Parse()
+
 	if flag.NArg() != 1 {
 		usage()
 		os.Exit(1)
 	}
+
 	key := flag.Arg(0)
 	scanner := bufio.NewScanner(os.Stdin)
+	bytes := make([]byte, 0)
+
 	for scanner.Scan() {
-		var v interface{}
 		b := scanner.Bytes()
 		if len(b) == 0 {
 			continue
 		}
-		if err := json.Unmarshal(scanner.Bytes(), &v); err != nil {
-			fmt.Fprintf(os.Stderr, "JSON parsing error: %s\n", err)
-			continue
-		}
-		printPaths(v, key, "")
+		bytes = append(bytes, b...)
 	}
+
+	var v interface{}
+	if err := json.Unmarshal(bytes, &v); err != nil {
+		fmt.Fprintf(os.Stderr, "JSON parsing error: %s\n", err)
+	}
+	printPaths(v, key, "")
+
 	if err := scanner.Err(); err != nil {
 		fatalln(err)
 	}
